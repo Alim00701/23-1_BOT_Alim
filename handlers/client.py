@@ -5,9 +5,9 @@ from keyboards.client_kb import start_markup
 
 
 def register_handlers_client(dp: Dispatcher):
-    dp.register_message_handler(start_handler, commands=['start'])
-    dp.register_message_handler(quiz_1, commands=['quiz'])
-    dp.register_message_handler(mem, commands=['mem'])
+    dp.register_message_handler(start_handler, commands=['start⚡️'])
+    dp.register_message_handler(quiz_1, commands=['quiz❔'])
+    dp.register_message_handler(mem, commands=['mem🤣'])
     dp.register_message_handler(pin, commands=['pin'], commands_prefix='/!')
 
 
