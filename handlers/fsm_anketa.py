@@ -4,13 +4,14 @@ from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from config import bot, ADMINS
 from keyboards.client_kb import submit_markup, cancel_markup, gender_markup
+from database.bot_db import sql_command_insert
 
 
 class FSMAdmin(StatesGroup):
     name = State()
     age = State()
     ID = State()
-    group = State()
+    group1 = State()
     direction = State()
     gender = State()
     submit = State()
@@ -58,7 +59,7 @@ async def load_Id_mentor(message: types.Message, state: FSMContext):
 
 async def load_group(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['group'] = message.text
+        data['group1'] = message.text
     await FSMAdmin.next()
     await message.answer("Какое у вас направление?",)
 
@@ -74,7 +75,7 @@ async def load_gender(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['gender'] = message.text
         await bot.send_message(message.chat.id,
-                               f"{data['name']}, {data['age']}, {data['ID']}, {data['group']}, {data['direction']}"
+                               f"{data['name']}, {data['age']}, {data['ID']}, {data['group1']}, {data['direction']}"
                                f"{data['gender']}")
     await FSMAdmin.next()
     await message.answer('Все правильно? да или нет?', reply_markup=submit_markup)
@@ -82,6 +83,7 @@ async def load_gender(message: types.Message, state: FSMContext):
 
 async def submit(message: types.Message, state: FSMContext):
     if message.text.lower() == 'да':
+        await sql_command_insert(state)
         await state.finish()
         await message.answer('Регистрация завершена!')
     elif message.text.lower() == 'нет':
@@ -105,7 +107,7 @@ def register_handlers_fsm_anketa(dp: Dispatcher):
     dp.register_message_handler(load_name, state=FSMAdmin.name)
     dp.register_message_handler(load_age, state=FSMAdmin.age)
     dp.register_message_handler(load_Id_mentor, state=FSMAdmin.ID)
-    dp.register_message_handler(load_group, state=FSMAdmin.group)
+    dp.register_message_handler(load_group, state=FSMAdmin.group1)
     dp.register_message_handler(load_direction, state=FSMAdmin.direction)
     dp.register_message_handler(load_gender, state=FSMAdmin.gender)
     dp.register_message_handler(submit, state=FSMAdmin.submit)
