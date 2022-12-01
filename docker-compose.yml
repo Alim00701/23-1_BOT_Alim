@@ -1,0 +1,11 @@
+version: '3,3'
+
+services:
+  bot:
+    container_name: bot23-1 Alimsaid
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /opt/services/bot
